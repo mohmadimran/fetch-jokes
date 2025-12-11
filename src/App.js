@@ -1,33 +1,60 @@
 import { useState } from "react";
-import "./App.css"
+import "./App.css";
 
 function App() {
-  const [jokes, setJokes] = useState(null);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [joke, setJoke] = useState(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
+    setError("");
+    setJoke(null);
 
     try {
-      setLoading(true)
-      setError(false)
-      const res = await fetch("https://official-joke-api.appspot.com/random_joke")
+      const res = await fetch("https://official-joke-api.appspot.com/random_joke");
+      if (!res.ok) throw new Error("Failed to fetch joke");
+
       const data = await res.json();
-      setJokes(data)
-    } catch (error) {
-      console.log(error)
-      setError(true)
+      setJoke(data);
+    } catch (err) {
+      setError("Could not fetch a joke. Try again");
+    } finally {
+      setLoading(false);
     }
-    finally { setLoading(false) }
-  }
+  };
 
   return (
     <div className="card">
       <h1 className="title">Random Joke</h1>
-      <p className="subtitle">Cllick the button to fetch a fresh one</p>
-      <button className="btn" onClick={fetchData}>{loading ? " Fetching…" : "Fetch joke"}</button>
-      <div>{jokes ? <p>{jokes.punchline}</p> : <p className="joke">No joke yet</p>}</div>
-      <div>{error && <p>Could not fetch a joke. Try again</p> }</div>
+      <p className="subtitle">Click the button to fetch a fresh one</p>
+
+      <button
+        className="btn"
+        onClick={fetchData}
+        disabled={loading}
+      >
+        {loading ? "Fetching…" : "Fetch Joke"}
+      </button>
+
+      {/* Joke */}
+      {joke && (
+        <div>
+          <p>{joke.setup}</p>
+          <p>{joke.punchline}</p>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div>
+          <p>{error}</p>
+          <button className="btn" onClick={fetchData}>Try Again</button>
+        </div>
+      )}
+
+      {/* Initial State */}
+      {!joke && !error && !loading && <p>No joke yet</p>}
     </div>
   );
 }
