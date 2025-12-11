@@ -24,7 +24,7 @@ function App() {
   return (
     <div className="card">
       <h1 className="title">Random Joke</h1>
-      <p className="subtitle">Click the button to fetch a fresh one</p>
+      <p className="subtitle">Cllick the button to fetch a fresh one</p>
       <button className="btn" onClick={fetchData}>{loading ? " Fetching…" : "Fetch joke"}</button>
       <div>{jokes ? <p>{jokes.punchline}</p> : <p className="joke">No joke yet</p>}</div>
       <div>{error && <p>Could not fetch a joke. Try again</p> }</div>
