@@ -13,12 +13,11 @@ function App() {
 
     try {
       const res = await fetch("https://official-joke-api.appspot.com/random_joke");
-      if (!res.ok) throw new Error("Failed to fetch joke");
-
+      if (!res.ok) throw new Error("Fetch failed");
       const data = await res.json();
       setJoke(data);
     } catch (err) {
-      setError("Could not fetch a joke. Try again");
+      setError("Could not fetch a joke. Try again.");
     } finally {
       setLoading(false);
     }
@@ -27,17 +26,17 @@ function App() {
   return (
     <div className="card">
       <h1 className="title">Random Joke</h1>
-      <p className="subtitle">Click the button to fetch a fresh one</p>
+      <p className="subtitle">Click the button to fetch a fresh one.</p>
 
       <button
         className="btn"
         onClick={fetchData}
         disabled={loading}
       >
-        {loading ? "Fetching…" : "Fetch Joke"}
+        {loading ? "Fetching..." : "Fetch joke"}
       </button>
 
-      {/* Joke */}
+      {/* Joke display */}
       {joke && (
         <div>
           <p>{joke.setup}</p>
@@ -45,15 +44,15 @@ function App() {
         </div>
       )}
 
-      {/* Error */}
+      {/* Error display */}
       {error && (
         <div>
           <p>{error}</p>
-          <button className="btn" onClick={fetchData}>Try Again</button>
+          <button className="btn" onClick={fetchData}>Try again</button>
         </div>
       )}
 
-      {/* Initial State */}
+      {/* Initial state */}
       {!joke && !error && !loading && <p>No joke yet</p>}
     </div>
   );
